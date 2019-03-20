@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'HSNotification'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of HSNotification.'
+  s.summary          = 'Nicer Notifications for Swift. - Better creation, activation/deactivation and cleanup'
 
   s.description      = <<-DESC
 Better Notifications for Swift.
