@@ -41,7 +41,7 @@ class Watcher {
 }
 ```
 
-Unlike a standard notification, waveObserver is fully released when Watcher is released.
+Unlike a standard notification, waveObserver is fully released when Watcher is released. (Posting a wave notification will not call the `//Do Something` code)
 
 ## Notifications can be Activated and Deactivated
 
@@ -65,11 +65,12 @@ N.B. Remember that you have to activate your notification for it to work.
 
 * either specify `activate:true` in the initialiser
 * or call myObserver.activate()`
+* or chain on the initialiser `HSNotification.init(....).activate()`
 
 
 ## HSNotificationObserver integrates well with View Controller lifecycle
 
-A common pattern for a view controller is to activate observers in view will appear, and de-activate them in view did appear
+A common pattern for a view controller is to activate observers in `viewWillAppear`, and de-activate them in `viewDidDisppear`
 
 Adding the `HSNotificationObserver` protocol to any class allows you to add a group of observers, and activate or deactivate them easily.
 
@@ -152,7 +153,7 @@ HSNotifications lets you skip the defaults. We assume
 
 you can override each of these in the initialiser
 
-Note that Apple's default is to use the same queue as the sender. If you want to do this, then just use centre = nil
+Note that Apple's default is to call your block on the same queue as the sender. If you want to do this, then just use centre = nil
 
 I find that I typically want to use notifications to update the UI - so my default is to use .main
 
