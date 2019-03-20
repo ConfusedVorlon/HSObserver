@@ -28,10 +28,13 @@ TODO: Add long description of the pod here.
   s.source           = { :git => 'https://github.com/ConfusedVorlon/HSNotification.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '10.0'
+  s.osx.deployment_target = '10.12'
+  s.tvos.deployment_target = '10.0'
+
 
   s.source_files = 'HSNotification/Classes/**/*'
-  
+
   # s.resource_bundles = {
   #   'HSNotification' => ['HSNotification/Assets/*.png']
   # }

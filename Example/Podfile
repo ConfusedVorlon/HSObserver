@@ -1,6 +1,0 @@
-use_frameworks!
-target 'HSNotification_Tests' do
-  pod 'HSNotification', :path => '../'
-  
-  
-end
