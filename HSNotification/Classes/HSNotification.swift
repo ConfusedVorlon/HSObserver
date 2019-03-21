@@ -10,19 +10,19 @@ import Foundation
 
 
 /// Set up an NSNotification block observer which can be started and stopped
-class HSNotification: CustomStringConvertible {
-    var centre:NotificationCenter
-    var names = [NSNotification.Name]()
-    var name:NSNotification.Name? {
+open class HSNotification: CustomStringConvertible {
+    open var centre:NotificationCenter
+    open var names = [NSNotification.Name]()
+    open var name:NSNotification.Name? {
         get {
             return names.first
         }
     }
-    var object:Any?
-    var queue:OperationQueue?
-    var block:((Notification) -> Swift.Void)
+    open var object:Any?
+    open var queue:OperationQueue?
+    open var block:((Notification) -> Swift.Void)
     
-    var notificationObservers = [NSObjectProtocol]()
+    open var notificationObservers = [NSObjectProtocol]()
     
     
     /// Create notification manager
@@ -34,7 +34,7 @@ class HSNotification: CustomStringConvertible {
     /// - parameter block: block to run (beware of retain cycles!)
     ///
     /// - returns: unactivated manager. Call activate() to start
-    convenience init(forName name: NSNotification.Name, object obj: Any? = nil,
+    public convenience init(forName name: NSNotification.Name, object obj: Any? = nil,
                      queue: OperationQueue? = .main,
                      center newCenter: NotificationCenter = NotificationCenter.default,
                      activate: Bool = false,
@@ -52,7 +52,7 @@ class HSNotification: CustomStringConvertible {
     /// - parameter block: block to run (beware of retain cycles!)
     ///
     /// - returns: unactivated manager. Call activate() to start
-    init(forNames names: [NSNotification.Name], object obj: Any? = nil,
+    public init(forNames names: [NSNotification.Name], object obj: Any? = nil,
          queue: OperationQueue? = .main,
          center newCenter: NotificationCenter = NotificationCenter.default,
          activate: Bool = false,
@@ -74,14 +74,14 @@ class HSNotification: CustomStringConvertible {
         deactivate()
     }
     
-    var description:String {
+    open var description:String {
         return "notif: \(String(describing: names)) - object: \(String(describing: object))"
     }
     
     
     /// Activate
     @discardableResult
-    func activate() -> HSNotification {
+    open func activate() -> HSNotification {
         if notificationObservers.count == 0 {
             for name in names {
                 let notificationObserver = centre.addObserver(forName: name,
@@ -96,7 +96,7 @@ class HSNotification: CustomStringConvertible {
     }
     
     /// Deactivate (this happens automatically on release
-    func deactivate() {
+    open func deactivate() {
         for notificationObserver in notificationObservers {
             centre.removeObserver(notificationObserver)
         }

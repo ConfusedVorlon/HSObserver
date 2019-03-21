@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol HSNotificationObserver {
+public protocol HSNotificationObserver {
     var observers:[HSNotification] {get set}
     func activateObservers()
     func deactivateObservers()
@@ -16,7 +16,7 @@ protocol HSNotificationObserver {
 }
 
 private var observerKey: Void?
-extension HSNotificationObserver {
+public extension HSNotificationObserver {
     private func _getObservers() -> [HSNotification] {
         guard let existing = objc_getAssociatedObject(self, &observerKey) as? [HSNotification] else {
             return [HSNotification]()
@@ -66,7 +66,7 @@ extension HSNotificationObserver {
     
 }
 
-extension HSNotification {
+public extension HSNotification {
     func add(to:HSNotificationObserver) {
         to.add(observer: self)
     }
