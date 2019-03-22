@@ -1,5 +1,5 @@
 //
-//  HSNotificationObserver.swift
+//  HSHasObservers.swift
 //  ChillRemote
 //
 //  Created by Rob Jonson on 04/07/2018.
@@ -8,32 +8,32 @@
 
 import Foundation
 
-public protocol HSNotificationObserver {
-    var observers:[HSNotification] {get set}
+public protocol HSHasObservers {
+    var observers:[HSObserver] {get set}
     func activateObservers()
     func deactivateObservers()
-    mutating func add(observer:HSNotification)
+    mutating func add(observer:HSObserver)
 }
 
 private var observerKey: Void?
-public extension HSNotificationObserver {
-    private func _getObservers() -> [HSNotification] {
-        guard let existing = objc_getAssociatedObject(self, &observerKey) as? [HSNotification] else {
-            return [HSNotification]()
+public extension HSHasObservers {
+    private func _getObservers() -> [HSObserver] {
+        guard let existing = objc_getAssociatedObject(self, &observerKey) as? [HSObserver] else {
+            return [HSObserver]()
         }
-        
+
         return existing
     }
-    
-    private func _setObservers(_ newValue:[HSNotification]) {
+
+    private func _setObservers(_ newValue:[HSObserver]) {
         let objcArray = newValue as NSArray
         objc_setAssociatedObject(self,
                                  &observerKey, objcArray,
                                  .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
 
     }
-    
-    var observers: [HSNotification] {
+
+    var observers: [HSObserver] {
         get {
             return _getObservers()
         }
@@ -41,33 +41,33 @@ public extension HSNotificationObserver {
             _setObservers(newValue)
         }
     }
-    
+
     func activateObservers() {
         observers.forEach { (notif) in
             notif.activate()
         }
     }
-    
+
     func deactivateObservers() {
         observers.forEach { (notif) in
             notif.deactivate()
         }
     }
-    
-    func add(observers newObservers:[HSNotification]) {
+
+    func add(observers newObservers:[HSObserver]) {
         var mutableObservers = observers
         mutableObservers.append(contentsOf: newObservers)
         _setObservers(mutableObservers)
     }
-    
-    func add(observer:HSNotification) {
+
+    func add(observer:HSObserver) {
         self.add(observers: [observer])
     }
-    
+
 }
 
-public extension HSNotification {
-    func add(to:HSNotificationObserver) {
+public extension HSObserver {
+    func add(to:HSHasObservers) {
         to.add(observer: self)
     }
 }

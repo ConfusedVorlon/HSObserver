@@ -1,5 +1,5 @@
 //
-//  HSNotification.swift
+//  HSObserver.swift
 
 //
 //  Created by Rob Jonson on 01/09/2016.
@@ -8,9 +8,11 @@
 
 import Foundation
 
+@available(*, deprecated,renamed: "HSObserver")
+public typealias HSNotification = HSObserver
 
 /// Set up an NSNotification block observer which can be started and stopped
-open class HSNotification: CustomStringConvertible {
+open class HSObserver: CustomStringConvertible {
     open var centre:NotificationCenter
     open var names = [NSNotification.Name]()
     open var name:NSNotification.Name? {
@@ -21,10 +23,10 @@ open class HSNotification: CustomStringConvertible {
     open var object:Any?
     open var queue:OperationQueue?
     open var block:((Notification) -> Swift.Void)
-    
+
     open var notificationObservers = [NSObjectProtocol]()
-    
-    
+
+
     /// Create notification manager
     ///
     /// - parameter name:  notification name
@@ -39,10 +41,10 @@ open class HSNotification: CustomStringConvertible {
                      center newCenter: NotificationCenter = NotificationCenter.default,
                      activate: Bool = false,
                      using block: @escaping (Notification) -> Swift.Void) {
-        
+
         self.init(forNames: [name], object: obj, queue: queue, center: newCenter, activate: activate, using: block)
     }
-    
+
     /// Create notification manager
     ///
     /// - parameter names:  notification names
@@ -57,31 +59,31 @@ open class HSNotification: CustomStringConvertible {
          center newCenter: NotificationCenter = NotificationCenter.default,
          activate: Bool = false,
          using block: @escaping (Notification) -> Swift.Void) {
-        
+
 
         self.centre = newCenter
         self.names = names
         self.object = obj
         self.queue = queue
         self.block = block
-        
+
         if activate {
             self.activate()
         }
     }
-    
+
     deinit {
         deactivate()
     }
-    
+
     open var description:String {
         return "notif: \(String(describing: names)) - object: \(String(describing: object))"
     }
-    
-    
+
+
     /// Activate
     @discardableResult
-    open func activate() -> HSNotification {
+    open func activate() -> HSObserver {
         if notificationObservers.count == 0 {
             for name in names {
                 let notificationObserver = centre.addObserver(forName: name,
@@ -91,16 +93,16 @@ open class HSNotification: CustomStringConvertible {
                 notificationObservers.append(notificationObserver)
             }
         }
-        
+
         return self
     }
-    
+
     /// Deactivate (this happens automatically on release
     open func deactivate() {
         for notificationObserver in notificationObservers {
             centre.removeObserver(notificationObserver)
         }
-        
+
         notificationObservers.removeAll()
     }
 }
