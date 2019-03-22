@@ -8,6 +8,8 @@
 
 import Foundation
 
+/// Add this protocol to any object which owns observers.
+/// You can then add the HSObserver directly to the object, and use activateObservers(), deactivateObservers()
 public protocol HSHasObservers {
     var observers:[HSObserver] {get set}
     func activateObservers()
@@ -30,7 +32,6 @@ public extension HSHasObservers {
         objc_setAssociatedObject(self,
                                  &observerKey, objcArray,
                                  .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-
     }
 
     var observers: [HSObserver] {
@@ -63,7 +64,6 @@ public extension HSHasObservers {
     func add(observer:HSObserver) {
         self.add(observers: [observer])
     }
-
 }
 
 public extension HSObserver {

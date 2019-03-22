@@ -1,4 +1,4 @@
-# HSObserver
+# HSNotification
 
 [![Version](https://img.shields.io/cocoapods/v/HSObserver.svg?style=flat)](https://cocoapods.org/pods/HSObserver)
 [![License](https://img.shields.io/cocoapods/l/HSObserver.svg?style=flat)](https://cocoapods.org/pods/HSObserver)
@@ -6,10 +6,10 @@
 
 ## Summary
 
-Better Notifications for Swift.
+Better Notification Observers for Swift.
 
 * Simpler API with sensible defaults
-* Easier to avoid 'dangling' notifications
+* Easier to avoid 'dangling' observers
 * Easy activation/deactivation
 * Simple integration with view controller lifecycles
 
@@ -23,7 +23,7 @@ it, simply add the following line to your Podfile:
 pod 'HSObserver'
 ```
 
-## Notifications are Released
+## Observers are Released
 
 ```swift
 class Watcher {
@@ -40,9 +40,9 @@ class Watcher {
 }
 ```
 
-Unlike a standard notification, waveObserver is fully released when Watcher is released. (Posting a wave notification will not call the `//Do Something` code)
+Unlike a standard observer, waveObserver is fully released when Watcher is released. (Posting a wave notification will not call the `//Do Something` code)
 
-## Notifications can be Activated and Deactivated
+## Observers can be Activated and Deactivated
 
 ```swift
     var waveObserver:HSObserver
@@ -60,7 +60,7 @@ Unlike a standard notification, waveObserver is fully released when Watcher is r
     }
 ```
 
-N.B. Remember that you have to activate your notification for it to work.
+N.B. Remember that you have to activate your observer for it to work.
 
 * either specify `activate:true` in the initialiser
 * or call myObserver.activate()`
@@ -113,7 +113,7 @@ this works well with the view lifecycle
     }
 ```
 
-## Add Multiple Notifications
+## Add Multiple Observers
 
 ```swift
         let manyThingsObserver = HSObserver.init(forNames: [Watcher.wave,Watcher.hello] ,
@@ -126,7 +126,7 @@ this works well with the view lifecycle
 ## Specify centre, queue, etc
 
 ```swift
-    /// Create notification manager
+    /// Create observer
     ///
     /// - parameter name:  notification name
     /// - parameter obj:   object to observe (default nil)
@@ -162,4 +162,4 @@ ConfusedVorlon, rob@hobbyistsoftware.com
 
 ## License
 
-HSObserver is available under the MIT license. See the LICENSE file for more info.
+HSNotification is available under the MIT license. See the LICENSE file for more info.

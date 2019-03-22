@@ -27,7 +27,7 @@ open class HSObserver: CustomStringConvertible {
     open var notificationObservers = [NSObjectProtocol]()
 
 
-    /// Create notification manager
+    /// Create observer
     ///
     /// - parameter name:  notification name
     /// - parameter obj:   object to observe (default nil)
@@ -45,7 +45,7 @@ open class HSObserver: CustomStringConvertible {
         self.init(forNames: [name], object: obj, queue: queue, center: newCenter, activate: activate, using: block)
     }
 
-    /// Create notification manager
+    /// Create observer for multiple notifications
     ///
     /// - parameter names:  notification names
     /// - parameter obj:   object to observe (default nil)
@@ -77,7 +77,7 @@ open class HSObserver: CustomStringConvertible {
     }
 
     open var description:String {
-        return "notif: \(String(describing: names)) - object: \(String(describing: object))"
+        return "Observer: \(String(describing: names)) - object: \(String(describing: object))"
     }
 
 
