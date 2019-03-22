@@ -1,6 +1,5 @@
 # HSNotification
 
-[![CI Status](https://img.shields.io/travis/ConfusedVorlon/HSNotification.svg?style=flat)](https://travis-ci.org/ConfusedVorlon/HSNotification)
 [![Version](https://img.shields.io/cocoapods/v/HSNotification.svg?style=flat)](https://cocoapods.org/pods/HSNotification)
 [![License](https://img.shields.io/cocoapods/l/HSNotification.svg?style=flat)](https://cocoapods.org/pods/HSNotification)
 [![Platform](https://img.shields.io/cocoapods/p/HSNotification.svg?style=flat)](https://cocoapods.org/pods/HSNotification)
@@ -12,7 +11,7 @@ Better Notifications for Swift.
 * Simpler API with sensible defaults
 * Easier to avoid 'dangling' notifications
 * Easy activation/deactivation
-* Simple integration with view controller lifecycles 
+* Simple integration with view controller lifecycles
 
 
 ## Installation
@@ -29,7 +28,7 @@ pod 'HSNotification'
 ```swift
 class Watcher {
     static let wave = NSNotification.Name.init("waveNotification")
-    
+
     var waveObserver:HSNotification
     init() {
         waveObserver = HSNotification.init(forName: Watcher.wave,
@@ -52,16 +51,16 @@ Unlike a standard notification, waveObserver is fully released when Watcher is r
                                            using: { (notif) in
             //Do Something
         })
-        
+
         //activate
         waveObserver.activate()
-        
+
         //deactivate
         waveObserver.deactivate()
     }
 ```
 
-N.B. Remember that you have to activate your notification for it to work. 
+N.B. Remember that you have to activate your notification for it to work.
 
 * either specify `activate:true` in the initialiser
 * or call myObserver.activate()`
@@ -81,14 +80,14 @@ class ViewController: NSViewController, HSNotificationObserver {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         //Add manually
         let waveObserver = HSNotification.init(forName: Watcher.wave,
                                            using: { (notif) in
                                             //Do Something
         })
         self.add(observer: waveObserver)
-        
+
         //Or by chaning
         HSNotification.init(forName: Watcher.wave,
                             using: { (notif) in
@@ -100,23 +99,23 @@ class ViewController: NSViewController, HSNotificationObserver {
 
 this works well with the view lifecycle
 
-```swift    
+```swift
     override func viewWillAppear() {
         super.viewWillAppear()
-        
+
         activateObservers()
     }
-    
+
     override func viewDidDisappear() {
         super.viewDidDisappear()
-        
+
         deactivateObservers()
     }
 ```
 
 ## Add Multiple Notifications
 
-```swift 
+```swift
         let manyThingsObserver = HSNotification.init(forNames: [Watcher.wave,Watcher.hello] ,
                                                      activate:true,
                                            using: { (notif) in
@@ -126,7 +125,7 @@ this works well with the view lifecycle
 
 ## Specify centre, queue, etc
 
-```swift 
+```swift
     /// Create notification manager
     ///
     /// - parameter name:  notification name
@@ -136,7 +135,7 @@ this works well with the view lifecycle
     /// - parameter block: block to run (beware of retain cycles!)
     ///
     /// - returns: unactivated manager. Call activate() to start
-    convenience init(forName name: NSNotification.Name, 
+    convenience init(forName name: NSNotification.Name,
                      object obj: Any? = nil,
                      queue: OperationQueue? = .main,
                      center newCenter: NotificationCenter = NotificationCenter.default,
