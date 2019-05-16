@@ -1,4 +1,4 @@
-# HSNotification
+# HSObserver
 
 [![Version](https://img.shields.io/cocoapods/v/HSObserver.svg?style=flat)](https://cocoapods.org/pods/HSObserver)
 [![License](https://img.shields.io/cocoapods/l/HSObserver.svg?style=flat)](https://cocoapods.org/pods/HSObserver)
