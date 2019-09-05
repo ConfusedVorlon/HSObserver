@@ -23,7 +23,7 @@ Better Notification Observer for Swift.
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'ConfusedVorlon' => 'rob@hobbyistsoftware.com' }
   s.source           = { :git => 'https://github.com/ConfusedVorlon/HSObserver.git', :tag => s.version.to_s }
-  s.swift_version = '4.2'
+  s.swift_version = '5.0'
 
   s.ios.deployment_target = '10.0'
   s.osx.deployment_target = '10.12'
