@@ -40,7 +40,9 @@ class Watcher {
 }
 ```
 
-Unlike a standard observer, waveObserver is fully released when Watcher is released. (Posting a wave notification will not call the `//Do Something` code)
+Unlike a standard observer, waveObserver is fully released when Watcher is released. 
+
+(Posting a wave notification will not call the `//Do Something` code once Watcher is released)
 
 ## Observers can be Activated and Deactivated
 
