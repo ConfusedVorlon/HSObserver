@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'HSObserver'
-  s.version          = '1.0.0'
+  s.version          = '1.1.0'
   s.summary          = 'Nicer Notification Observers for Swift. - Better creation, activation/deactivation and cleanup'
 
   s.description      = <<-DESC
