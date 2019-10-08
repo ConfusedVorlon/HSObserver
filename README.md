@@ -158,6 +158,33 @@ Note that Apple's default is to call your block on the same queue as the sender.
 
 I find that I typically want to use notifications to update the UI - so my default is to use .main
 
+## Convenience functions on NSNotification.Name
+
+Post a notification directly
+  
+  ```swift
+  class Watcher {
+      static let wave = NSNotification.Name.init("waveNotification")
+
+    func doPosting() {
+        Watcher.wave.post()
+        //or
+        Watcher.wave.post(object:self,userInfo:["Foo":"Bar"])
+    }
+  }
+  ```
+
+Assume the default notification centre and default options when posting directly from NotificationCenter
+
+  ```swift
+  
+  NotificationCenter.post(Watcher.wave)
+  //is equivalent to
+  NotificationCenter.default.post(Watcher.wave,object:nil)
+  
+  ```
+    
+
 ## Author
 
 ConfusedVorlon, rob@hobbyistsoftware.com
