@@ -6,7 +6,7 @@
 
 ## Summary
 
-Better Notification Observers for Swift.
+Better Notification & Key Value Observers for Swift.
 
 * Simpler API with sensible defaults
 * Easier to avoid 'dangling' observers
@@ -23,7 +23,10 @@ it, simply add the following line to your Podfile:
 pod 'HSObserver'
 ```
 
-## Observers are Released
+Or Install as a swift package
+
+
+## Observers are Released Automatically
 
 ```swift
 class Watcher {
@@ -164,25 +167,44 @@ Post a notification directly
   
   ```swift
   class Watcher {
-      static let wave = NSNotification.Name.init("waveNotification")
+    struct Notif {
+        static let wave = NSNotification.Name.init("waveNotification")
+    }
+      
 
     func doPosting() {
-        Watcher.wave.post()
+        Watcher.Notif.wave.post()
         //or
-        Watcher.wave.post(object:self,userInfo:["Foo":"Bar"])
+        Watcher.Notif.wave.post(object:self,userInfo:["Foo":"Bar"])
     }
   }
   ```
 
 Assume the default notification centre and default options when posting directly from NotificationCenter
+(I strongly reccomend that you structure your notifications within a Notif struct of the relevant object. It makes things really easy to read)
 
   ```swift
   
-  NotificationCenter.post(Watcher.wave)
+  NotificationCenter.post(Watcher.Notif.wave)
   //is equivalent to
   NotificationCenter.default.post(Watcher.wave,object:nil)
   
   ```
+    
+## Now with Key Value Notifications
+
+for example, to observe the duration of an AVPlayerItem
+
+  ```swift
+durationObserver = HSKeyPathObserver.init(forKeyPath: "duration",
+                                          of: item,
+                                          activate:true) {
+                                            [weak self](_) in
+                                            self?.generateImages()
+}
+  ```
+  
+  (again, remember to keep a reference to durationObserver or it will disappear)
     
 
 ## Author

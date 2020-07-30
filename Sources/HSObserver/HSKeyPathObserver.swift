@@ -15,6 +15,14 @@ public class HSKeyPathObserver:NSObject, HSObserves {
     private var options:NSKeyValueObservingOptions
     weak private var object:AnyObject?
     
+    
+    /// Based on addObserver(_:forKeyPath:options:context:), but with a callback block
+    /// - Parameters:
+    ///   - keyPath: the string key path to observe
+    ///   - object: the object you want to observe
+    ///   - options: NSKeyValueObservingOptions
+    ///   - activate: whether to immediately activate the observer
+    ///   - block: the block to call when there is a change
     public init(forKeyPath keyPath: String,of object: AnyObject, options: NSKeyValueObservingOptions = [],activate:Bool = false, block:@escaping ([NSKeyValueChangeKey:Any]?)->Void ){
         self.block = block
         self.keyPath = keyPath
