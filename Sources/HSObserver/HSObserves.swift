@@ -8,6 +8,7 @@
 import Foundation
 
 public protocol HSObserves {
+    @discardableResult
     func activate() -> Self
     func deactivate()
 }

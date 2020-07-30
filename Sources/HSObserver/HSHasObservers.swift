@@ -11,30 +11,30 @@ import Foundation
 /// Add this protocol to any object which owns observers.
 /// You can then add the HSObserver directly to the object, and use activateObservers(), deactivateObservers()
 public protocol HSHasObservers {
-    var observers:[HSObserver] {get set}
+    var observers:[HSObserves] {get set}
     func activateObservers()
     func deactivateObservers()
-    mutating func add(observer:HSObserver)
+    mutating func add(observer:HSObserves)
 }
 
 private var observerKey: Void?
 public extension HSHasObservers {
-    private func _getObservers() -> [HSObserver] {
-        guard let existing = objc_getAssociatedObject(self, &observerKey) as? [HSObserver] else {
+    private func _getObservers() -> [HSObserves] {
+        guard let existing = objc_getAssociatedObject(self, &observerKey) as? [HSObserves] else {
             return [HSObserver]()
         }
 
         return existing
     }
 
-    private func _setObservers(_ newValue:[HSObserver]) {
+    private func _setObservers(_ newValue:[HSObserves]) {
         let objcArray = newValue as NSArray
         objc_setAssociatedObject(self,
                                  &observerKey, objcArray,
                                  .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
 
-    var observers: [HSObserver] {
+    var observers: [HSObserves] {
         get {
             return _getObservers()
         }
@@ -55,18 +55,18 @@ public extension HSHasObservers {
         }
     }
 
-    func add(observers newObservers:[HSObserver]) {
+    func add(observers newObservers:[HSObserves]) {
         var mutableObservers = observers
         mutableObservers.append(contentsOf: newObservers)
         _setObservers(mutableObservers)
     }
 
-    func add(observer:HSObserver) {
+    func add(observer:HSObserves) {
         self.add(observers: [observer])
     }
 }
 
-public extension HSObserver {
+public extension HSObserves {
     func add(to:HSHasObservers) {
         to.add(observer: self)
     }
