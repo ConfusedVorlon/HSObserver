@@ -12,7 +12,7 @@ import Foundation
 public typealias HSNotification = HSObserver
 
 /// Set up an NSNotification block observer which can be started and stopped
-open class HSObserver: CustomStringConvertible {
+open class HSObserver: CustomStringConvertible, HSObserves {
     open var centre:NotificationCenter
     open var names = [NSNotification.Name]()
     open var name:NSNotification.Name? {
@@ -83,7 +83,7 @@ open class HSObserver: CustomStringConvertible {
 
     /// Activate
     @discardableResult
-    open func activate() -> HSObserver {
+    open func activate() -> Self {
         if notificationObservers.count == 0 {
             for name in names {
                 let notificationObserver = centre.addObserver(forName: name,

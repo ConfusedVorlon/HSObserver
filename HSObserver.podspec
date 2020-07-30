@@ -30,6 +30,6 @@ Better Notification Observer for Swift.
   s.tvos.deployment_target = '10.0'
   s.watchos.deployment_target = '2.0'
 
-  s.source_files = 'HSObserver/Classes/**/*'
+  s.source_files = 'Sources/HSObserver/**/*'
 
 end
