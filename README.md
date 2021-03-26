@@ -10,6 +10,7 @@ Better Notification & Key Value Observers for Swift.
 
 * Simpler API with sensible defaults
 * Easier to avoid 'dangling' observers
+* Delivers on main thread by default (avoid unexpected concurrency bugs)
 * Easy activation/deactivation
 * Simple integration with view controller lifecycles
 
