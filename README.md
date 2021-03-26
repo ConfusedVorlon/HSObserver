@@ -30,11 +30,14 @@ Or Install as a swift package
 
 ```swift
 class Watcher {
-    static let wave = NSNotification.Name.init("waveNotification")
+    struct Notif {
+        static let wave = NSNotification.Name.init("waveNotification")
+    }
+    
 
     var waveObserver:HSObserver
     init() {
-        waveObserver = HSObserver.init(forName: Watcher.wave,
+        waveObserver = HSObserver.init(forName: Watcher.Notif.wave,
                                            activate:true,
                                            using: { (notif) in
             //Do Something
@@ -47,12 +50,19 @@ Unlike a standard observer, waveObserver is fully released when Watcher is relea
 
 (Posting a wave notification will not call the `//Do Something` code once Watcher is released)
 
+## Delivery happens on the main thread
+
+It's easy to get bitten by notifications unexpectedly arriving on a background thread. In almost all cases - [you don't want that!](https://inessential.com/2021/03/20/how_netnewswire_handles_threading)
+.
+
+(you can change this for a given observer if you want to - but you probably shouldn't)
+
 ## Observers can be Activated and Deactivated
 
 ```swift
     var waveObserver:HSObserver
     init() {
-        waveObserver = HSObserver.init(forName: Watcher.wave,
+        waveObserver = HSObserver.init(forName: Watcher.Notif.wave,
                                            using: { (notif) in
             //Do Something
         })
@@ -87,14 +97,14 @@ class ViewController: NSViewController, HSHasObservers {
         super.viewDidLoad()
 
         //Add manually
-        let waveObserver = HSObserver.init(forName: Watcher.wave,
+        let waveObserver = HSObserver.init(forName: Watcher.Notif.wave,
                                            using: { (notif) in
                                             //Do Something
         })
         self.add(observer: waveObserver)
 
         //Or by chaining
-        HSObserver.init(forName: Watcher.wave,
+        HSObserver.init(forName: Watcher.Notif.wave,
                             using: { (notif) in
                                 //Do Something
         }).add(to: self)
@@ -121,7 +131,7 @@ this works well with the view lifecycle
 ## Add Multiple Observers
 
 ```swift
-        let manyThingsObserver = HSObserver.init(forNames: [Watcher.wave,Watcher.hello] ,
+    let manyThingsObserver = HSObserver.init(forNames: [Watcher.Notif.wave,Watcher.Notif.hello] ,
                                                      activate:true,
                                            using: { (notif) in
                                             //Do Something
@@ -160,6 +170,8 @@ you can override each of these in the initialiser
 Note that Apple's default is to call your block on the same queue as the sender. If you want to do this, then just use centre = nil
 
 I find that I typically want to use notifications to update the UI - so my default is to use .main
+
+Brent Simmons has a [great article](https://inessential.com/2021/03/20/how_netnewswire_handles_threading) on why you should almost always be using .main
 
 ## Convenience functions on NSNotification.Name
 
