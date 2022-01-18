@@ -23,7 +23,7 @@ open class HSObserver: CustomStringConvertible, HSObserves {
 
     open var notificationObservers = [NSObjectProtocol]()
 
-
+    
     /// Create observer
     ///
     /// - parameter name:  notification name
@@ -34,14 +34,18 @@ open class HSObserver: CustomStringConvertible, HSObserves {
     ///
     /// - returns: unactivated manager. Call activate() to start
     public convenience init(forName name: NSNotification.Name, object obj: Any? = nil,
-                     queue: OperationQueue? = .main,
+                     queue: OperationQueue?,
                      center newCenter: NotificationCenter = NotificationCenter.default,
                      activate: Bool = false,
                      using block: @escaping (Notification) -> Swift.Void) {
 
-        self.init(forNames: [name], object: obj, queue: queue, center: newCenter, activate: activate, using: block)
+        self.init(forNames: [name],
+                  object: obj,
+                  queue:queue,
+                  center: newCenter,
+                  activate: activate, using: block)
     }
-
+    
     /// Create observer for multiple notifications
     ///
     /// - parameter names:  notification names
@@ -51,8 +55,9 @@ open class HSObserver: CustomStringConvertible, HSObserves {
     /// - parameter block: block to run (beware of retain cycles!)
     ///
     /// - returns: unactivated manager. Call activate() to start
-    public init(forNames names: [NSNotification.Name], object obj: Any? = nil,
-         queue: OperationQueue? = .main,
+    public init(forNames names: [NSNotification.Name],
+                object obj: Any? = nil,
+         queue: OperationQueue?,
          center newCenter: NotificationCenter = NotificationCenter.default,
          activate: Bool = false,
          using block: @escaping (Notification) -> Swift.Void) {
@@ -68,6 +73,68 @@ open class HSObserver: CustomStringConvertible, HSObserves {
             self.activate()
         }
     }
+
+
+
+    //MARK: @MainActor variants on .main queue
+    
+    /// Create observer - queue is main, so block has signature @MainActor
+    ///
+    /// - parameter name:  notification name
+    /// - parameter obj:   object to observe (default nil)
+    /// - parameter queue: queue to run the block on (default main)
+    /// - parameter center: notification center (default NotificationCenter.default)
+    /// - parameter block: block to run (beware of retain cycles!)
+    ///
+    /// - returns: unactivated manager. Call activate() to start
+    @available(macOS 10.15, *)
+    public convenience init(forName name: NSNotification.Name, object obj: Any? = nil,
+                     center newCenter: NotificationCenter = NotificationCenter.default,
+                     activate: Bool = false,
+                     using block: @escaping @MainActor (Notification) -> Swift.Void) {
+
+        self.init(forNames: [name],
+                  object: obj,
+                  center: newCenter,
+                  activate: activate,
+                  using: block)
+    }
+    
+  
+    /// Create observer for multiple notifications - queue is main, so block has signature @MainActor
+    ///
+    /// - parameter names:  notification names
+    /// - parameter obj:   object to observe (default nil)
+    /// - parameter queue: queue to run the block on (default main)
+    /// - parameter activate: whether to activate immediately (default false)
+    /// - parameter block: block to run (beware of retain cycles!)
+    ///
+    /// - returns: unactivated manager. Call activate() to start
+    @available(macOS 10.15, *)
+    public init(forNames names: [NSNotification.Name],
+                object obj: Any? = nil,
+         center newCenter: NotificationCenter = NotificationCenter.default,
+         activate: Bool = false,
+         using block: @escaping @MainActor  (Notification) -> Swift.Void) {
+
+        let regularBlock:((Notification) -> Swift.Void) = {
+            notification in
+            Task {
+                await block(notification)
+            }
+        }
+
+        self.centre = newCenter
+        self.names = names
+        self.object = obj
+        self.queue = .main
+        self.block = regularBlock
+
+        if activate {
+            self.activate()
+        }
+    }
+    
 
     deinit {
         deactivate()
