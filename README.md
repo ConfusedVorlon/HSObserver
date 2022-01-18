@@ -58,6 +58,8 @@ It's easy to get bitten by notifications unexpectedly arriving on a background t
 
 (you can change this for a given observer if you want to - but you probably shouldn't)
 
+If you use the initialiser without specifying a queue (the default), then the calling block is marked as @MainActor - so should play nicely with swift async code
+
 ## Observers can be Activated and Deactivated
 
 ```swift
