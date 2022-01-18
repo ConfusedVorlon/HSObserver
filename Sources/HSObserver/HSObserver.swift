@@ -18,11 +18,11 @@ open class HSObserver: CustomStringConvertible, HSObserves {
         }
     }
     open var object:Any?
-    open var queue:OperationQueue?
+    open var queue:OperationQueue
     open var block:((Notification) -> Swift.Void)
-
+    
     open var notificationObservers = [NSObjectProtocol]()
-
+    
     
     /// Create observer
     ///
@@ -33,12 +33,13 @@ open class HSObserver: CustomStringConvertible, HSObserves {
     /// - parameter block: block to run (beware of retain cycles!)
     ///
     /// - returns: unactivated manager. Call activate() to start
-    public convenience init(forName name: NSNotification.Name, object obj: Any? = nil,
-                     queue: OperationQueue?,
-                     center newCenter: NotificationCenter = NotificationCenter.default,
-                     activate: Bool = false,
-                     using block: @escaping (Notification) -> Swift.Void) {
-
+    public convenience init(forName name: NSNotification.Name,
+                            object obj: Any? = nil,
+                            queue: OperationQueue,
+                            center newCenter: NotificationCenter = NotificationCenter.default,
+                            activate: Bool = false,
+                            using block: @escaping (Notification) -> Swift.Void) {
+        
         self.init(forNames: [name],
                   object: obj,
                   queue:queue,
@@ -57,25 +58,25 @@ open class HSObserver: CustomStringConvertible, HSObserves {
     /// - returns: unactivated manager. Call activate() to start
     public init(forNames names: [NSNotification.Name],
                 object obj: Any? = nil,
-         queue: OperationQueue?,
-         center newCenter: NotificationCenter = NotificationCenter.default,
-         activate: Bool = false,
-         using block: @escaping (Notification) -> Swift.Void) {
-
-
+                queue: OperationQueue,
+                center newCenter: NotificationCenter = NotificationCenter.default,
+                activate: Bool = false,
+                using block: @escaping (Notification) -> Swift.Void) {
+        
+        
         self.centre = newCenter
         self.names = names
         self.object = obj
         self.queue = queue
         self.block = block
-
+        
         if activate {
             self.activate()
         }
     }
-
-
-
+    
+    
+    
     //MARK: @MainActor variants on .main queue
     
     /// Create observer - queue is main, so block has signature @MainActor
@@ -88,11 +89,12 @@ open class HSObserver: CustomStringConvertible, HSObserves {
     ///
     /// - returns: unactivated manager. Call activate() to start
     @available(macOS 10.15, *)
-    public convenience init(forName name: NSNotification.Name, object obj: Any? = nil,
-                     center newCenter: NotificationCenter = NotificationCenter.default,
-                     activate: Bool = false,
-                     using block: @escaping @MainActor (Notification) -> Swift.Void) {
-
+    public convenience init(forName name: NSNotification.Name,
+                            object obj: Any? = nil,
+                            center newCenter: NotificationCenter = NotificationCenter.default,
+                            activate: Bool = false,
+                            using block: @escaping @MainActor (Notification) -> Swift.Void) {
+        
         self.init(forNames: [name],
                   object: obj,
                   center: newCenter,
@@ -100,7 +102,7 @@ open class HSObserver: CustomStringConvertible, HSObserves {
                   using: block)
     }
     
-  
+    
     /// Create observer for multiple notifications - queue is main, so block has signature @MainActor
     ///
     /// - parameter names:  notification names
@@ -113,60 +115,60 @@ open class HSObserver: CustomStringConvertible, HSObserves {
     @available(macOS 10.15, *)
     public init(forNames names: [NSNotification.Name],
                 object obj: Any? = nil,
-         center newCenter: NotificationCenter = NotificationCenter.default,
-         activate: Bool = false,
-         using block: @escaping @MainActor  (Notification) -> Swift.Void) {
-
+                center newCenter: NotificationCenter = NotificationCenter.default,
+                activate: Bool = false,
+                using block: @escaping @MainActor  (Notification) -> Swift.Void) {
+        
         let regularBlock:((Notification) -> Swift.Void) = {
             notification in
             Task {
                 await block(notification)
             }
         }
-
+        
         self.centre = newCenter
         self.names = names
         self.object = obj
         self.queue = .main
         self.block = regularBlock
-
+        
         if activate {
             self.activate()
         }
     }
     
-
+    
     deinit {
         deactivate()
     }
-
+    
     open var description:String {
         return "Observer: \(String(describing: names)) - object: \(String(describing: object))"
     }
-
-
+    
+    
     /// Activate
     @discardableResult
     open func activate() -> Self {
         if notificationObservers.count == 0 {
             for name in names {
                 let notificationObserver = centre.addObserver(forName: name,
-                                                                              object: object,
-                                                                              queue: queue,
-                                                                              using: block)
+                                                              object: object,
+                                                              queue: queue,
+                                                              using: block)
                 notificationObservers.append(notificationObserver)
             }
         }
-
+        
         return self
     }
-
+    
     /// Deactivate (this happens automatically on release
     open func deactivate() {
         for notificationObserver in notificationObservers {
             centre.removeObserver(notificationObserver)
         }
-
+        
         notificationObservers.removeAll()
     }
 }
