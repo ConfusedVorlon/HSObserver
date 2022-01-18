@@ -8,9 +8,6 @@
 
 import Foundation
 
-@available(*, deprecated,renamed: "HSObserver")
-public typealias HSNotification = HSObserver
-
 /// Set up an NSNotification block observer which can be started and stopped
 open class HSObserver: CustomStringConvertible, HSObserves {
     open var centre:NotificationCenter
