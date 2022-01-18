@@ -23,7 +23,11 @@ public class HSKeyPathObserver:NSObject, HSObserves {
     ///   - options: NSKeyValueObservingOptions
     ///   - activate: whether to immediately activate the observer
     ///   - block: the block to call when there is a change
-    public init(forKeyPath keyPath: String,of object: AnyObject, options: NSKeyValueObservingOptions = [],activate:Bool = false, block:@escaping ([NSKeyValueChangeKey:Any]?)->Void ){
+    public init(forKeyPath keyPath: String,
+                of object: AnyObject,
+                options: NSKeyValueObservingOptions = [],
+                activate:Bool = false,
+                block:@escaping ([NSKeyValueChangeKey:Any]?)->Void ){
         self.block = block
         self.keyPath = keyPath
         self.options = options
@@ -54,7 +58,10 @@ public class HSKeyPathObserver:NSObject, HSObserves {
         object?.removeObserver(self, forKeyPath: keyPath)
     }
     
-    override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?)
+    override public func observeValue(forKeyPath keyPath: String?,
+                                      of object: Any?,
+                                      change: [NSKeyValueChangeKey : Any]?,
+                                      context: UnsafeMutableRawPointer?)
     {
         block(change)
     }
