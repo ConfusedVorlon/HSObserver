@@ -9,7 +9,8 @@
 import Foundation
 
 /// Set up an NSNotification block observer which can be started and stopped
-open class HSObserver: CustomStringConvertible, HSObserves {
+@objc
+open class HSObserver: NSObject, HSObserves {
     open var centre:NotificationCenter
     open var names = [NSNotification.Name]()
     open var name:NSNotification.Name? {
@@ -70,6 +71,8 @@ open class HSObserver: CustomStringConvertible, HSObserves {
         self.queue = queue
         self.block = block
         
+        super.init()
+        
         if activate {
             self.activate()
         }
@@ -88,7 +91,7 @@ open class HSObserver: CustomStringConvertible, HSObserves {
     /// - parameter block: block to run (beware of retain cycles!)
     ///
     /// - returns: unactivated manager. Call activate() to start
-    @available(macOS 10.15, *)
+    @objc
     public convenience init(forName name: NSNotification.Name,
                             object obj: Any? = nil,
                             center newCenter: NotificationCenter = NotificationCenter.default,
@@ -107,12 +110,11 @@ open class HSObserver: CustomStringConvertible, HSObserves {
     ///
     /// - parameter names:  notification names
     /// - parameter obj:   object to observe (default nil)
-    /// - parameter queue: queue to run the block on (default main)
     /// - parameter activate: whether to activate immediately (default false)
     /// - parameter block: block to run (beware of retain cycles!)
     ///
     /// - returns: unactivated manager. Call activate() to start
-    @available(macOS 10.15, *)
+    @objc
     public init(forNames names: [NSNotification.Name],
                 object obj: Any? = nil,
                 center newCenter: NotificationCenter = NotificationCenter.default,
@@ -122,7 +124,8 @@ open class HSObserver: CustomStringConvertible, HSObserves {
         let regularBlock:((Notification) -> Swift.Void) = {
             notification in
             Task {
-                await block(notification)
+                @MainActor in
+                block(notification)
             }
         }
         
@@ -131,6 +134,8 @@ open class HSObserver: CustomStringConvertible, HSObserves {
         self.object = obj
         self.queue = .main
         self.block = regularBlock
+        
+        super.init()
         
         if activate {
             self.activate()
@@ -142,13 +147,14 @@ open class HSObserver: CustomStringConvertible, HSObserves {
         deactivate()
     }
     
-    open var description:String {
+    open override var description:String {
         return "Observer: \(String(describing: names)) - object: \(String(describing: object))"
     }
     
     
     /// Activate
     @discardableResult
+    @objc
     open func activate() -> Self {
         if notificationObservers.count == 0 {
             for name in names {
@@ -164,6 +170,7 @@ open class HSObserver: CustomStringConvertible, HSObserves {
     }
     
     /// Deactivate (this happens automatically on release
+    @objc
     open func deactivate() {
         for notificationObserver in notificationObservers {
             centre.removeObserver(notificationObserver)

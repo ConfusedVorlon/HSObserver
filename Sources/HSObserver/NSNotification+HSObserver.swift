@@ -26,6 +26,7 @@ public extension NotificationCenter {
     ///   - aName: the notification
     ///   - anObject: object
     ///   - aUserInfo: userInfo
+    @objc
     class func post(name aName: NSNotification.Name,
                     object anObject: Any? = nil,
                     userInfo aUserInfo: [AnyHashable : Any]? = nil) {
