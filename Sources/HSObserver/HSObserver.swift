@@ -91,7 +91,6 @@ open class HSObserver: NSObject, HSObserves {
     /// - parameter block: block to run (beware of retain cycles!)
     ///
     /// - returns: unactivated manager. Call activate() to start
-    @available(macOS 10.15, *)
     @objc
     public convenience init(forName name: NSNotification.Name,
                             object obj: Any? = nil,
@@ -115,7 +114,6 @@ open class HSObserver: NSObject, HSObserves {
     /// - parameter block: block to run (beware of retain cycles!)
     ///
     /// - returns: unactivated manager. Call activate() to start
-    @available(macOS 10.15, *)
     @objc
     public init(forNames names: [NSNotification.Name],
                 object obj: Any? = nil,
